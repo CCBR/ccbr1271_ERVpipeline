@@ -4,5 +4,6 @@ include: join("rules","init.smk")
 localrules: all
 rule all:
     input:
-
-include: join("rules","dummy.smk")
+        #fastqc
+        expand(join(QCDIR,"fastqc","{replicate}.R1_fastqc.zip"), replicate=REPLICATES),
+include: join("rules","qc.smk")

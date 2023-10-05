@@ -1,3 +1,9 @@
-sampleName	path_to_R1_fastq	path_to_R2_fastq
-Sample1	<path to sample1 R1 fastq>	<path to sample1 R2 fastq>
-Sample2	<path to sample2 R1 fastq>	<path to sample2 R2 fastq>
+replicateName	sampleName	stranded	path_to_R1_fastq	path_to_R2_fastq
+B16F10-CELLS	B16F10-CELLS	Y	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/B16F10-CELLS_S6_R1_001.fastq.gz	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/B16F10-CELLS_S6_R2_001.fastq.gz
+B16F10-EV_1E9	B16F10-EV_1E9	Y	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/B16F10-EV_1E9_S3_R1_001.fastq.gz	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/B16F10-EV_1E9_S3_R2_001.fastq.gz
+CT26-CELLS	CT26-CELLS	Y	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/CT26-CELLS_S5_R1_001.fastq.gz	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/CT26-CELLS_S5_R2_001.fastq.gz
+CT26-EV_1E9	CT26-EV_1E9	Y	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/CT26-EV_1E9_S2_R1_001.fastq.gz	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/CT26-EV_1E9_S2_R2_001.fastq.gz
+DC24-CELLS	DC24-CELLS	Y	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/DC24-CELLS_S4_R1_001.fastq.gz	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/DC24-CELLS_S4_R2_001.fastq.gz
+DC24-EV_1E9	DC24-EV_1E9	Y	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/DC24-EV_1E9_S1_R1_001.fastq.gz	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/DC24-EV_1E9_S1_R2_001.fastq.gz
+NEG-CTRL_H2O	NEG-CTRL_H2O	Y	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/NEG-CTRL_H2O_S8_R1_001.fastq.gz	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/NEG-CTRL_H2O_S8_R2_001.fastq.gz
+POS-CTRL_MOUSE-RNA	POS-CTRL_MOUSE-RNA	Y	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/POS-CTRL_MOUSE-RNA_S7_R1_001.fastq.gz	/data/EVset_RNAseq/Pipelines/ERVPipeline/testdata/POS-CTRL_MOUSE-RNA_S7_R2_001.fastq.gz

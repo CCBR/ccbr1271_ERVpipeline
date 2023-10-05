@@ -5,6 +5,7 @@ import sys
 import os
 import pandas as pd
 import yaml
+import uuid
 # import glob
 # import shutil
 #########################################################
@@ -77,48 +78,56 @@ for f in ["samplemanifest"]:
 # each line in the samplemanifest is a replicate
 # multiple replicates belong to a sample
 # currently only 1,2,3 or 4 replicates per sample is supported
-# REPLICATESDF = pd.read_csv(config["samplemanifest"],sep="\t",header=0,index_col="replicateName")
-# REPLICATES = list(REPLICATESDF.index)
-# SAMPLES = list(REPLICATESDF.sampleName.unique())
+REPLICATESDF = pd.read_csv(config["samplemanifest"],sep="\t",header=0,index_col="replicateName")
+REPLICATES = list(REPLICATESDF.index)
+SAMPLES = list(REPLICATESDF.sampleName.unique())
 
-# print("#"*100)
-# print("# Checking Sample Manifest...")
-# print("# \tTotal Replicates in manifest : "+str(len(REPLICATES)))
-# print("# \tTotal Samples in manifest : "+str(len(SAMPLES)))
-# print("# Checking read access to raw fastqs...")
+print("#"*100)
+print("# Checking Sample Manifest...")
+print("# \tTotal Replicates in manifest : "+str(len(REPLICATES)))
+print("# \tTotal Samples in manifest : "+str(len(SAMPLES)))
+print("# Checking read access to raw fastqs...")
 
-# REPLICATESDF["R1"]=join(RESOURCESDIR,"dummy")
-# REPLICATESDF["R2"]=join(RESOURCESDIR,"dummy")
-# REPLICATESDF["PEorSE"]="PE"
 
-# for replicate in REPLICATES:
-#     R1file=REPLICATESDF["path_to_R1_fastq"][replicate]
-#     R2file=REPLICATESDF["path_to_R2_fastq"][replicate]
-#     # print(replicate,R1file,R2file)
-#     check_readaccess(R1file)
-#     R1filenewname=join(WORKDIR,"fastqs",replicate+".R1.fastq.gz")
-#     if not os.path.exists(R1filenewname):
-#         os.symlink(R1file,R1filenewname)
-#     REPLICATESDF.loc[[replicate],"R1"]=R1filenewname
-#     if str(R2file)!='nan':
-#         check_readaccess(R2file)
-#         R2filenewname=join(WORKDIR,"fastqs",replicate+".R2.fastq.gz")
-#         if not os.path.exists(R2filenewname):
-#             os.symlink(R2file,R2filenewname)
-#         REPLICATESDF.loc[[replicate],"R2"]=R2filenewname
-#     else:
-# # only PE samples are supported by the ATACseq pipeline at the moment
-#         print("# Only Paired-end samples are supported by this pipeline!")
-#         print("# "+config["samplemanifest"]+" is missing second fastq file for "+replicate)
-#         exit()
-#         REPLICATESDF.loc[[replicate],"PEorSE"]="SE"
+DUMMYFILE=join(RESOURCESDIR,"dummy")
+REPLICATESDF["R1"]=DUMMYFILE
+REPLICATESDF["R2"]=DUMMYFILE
+REPLICATESDF["PEorSE"]="PE"
 
-# print("# Read access to all raw fastqs is confirmed!")
-# print("#"*100)
+nPE=0
+nSE=0
+ALLINPUTFASTQS=list()
+for replicate in REPLICATES:
+    R1file=REPLICATESDF["path_to_R1_fastq"][replicate]
+    R2file=REPLICATESDF["path_to_R2_fastq"][replicate]
+    # print(replicate,R1file,R2file)
+    check_readaccess(R1file)
+    R1filenewname=join(WORKDIR,"fastqs",replicate+".R1.fastq.gz")
+    if not os.path.exists(R1filenewname):
+        os.symlink(R1file,R1filenewname)
+    REPLICATESDF.loc[[replicate],"R1"]=R1filenewname
+    ALLINPUTFASTQS.append(R1filenewname)
+    if str(R2file)!='nan':
+        check_readaccess(R2file)
+        R2filenewname=join(WORKDIR,"fastqs",replicate+".R2.fastq.gz")
+        if not os.path.exists(R2filenewname):
+            os.symlink(R2file,R2filenewname)
+        REPLICATESDF.loc[[replicate],"R2"]=R2filenewname
+        nPE+=1
+        ALLINPUTFASTQS.append(R2filenewname)
+    else:
+        REPLICATESDF.loc[[replicate],"PEorSE"]="SE"
+        REPLICATESDF.loc[[replicate],"R2"]=DUMMYFILE
+        nSE+=1
 
-# SAMPLE2REPLICATES=dict()
-# for g in SAMPLES:
-#     SAMPLE2REPLICATES[g]=list(REPLICATESDF[REPLICATESDF['sampleName']==g].index)
+print("# \tTotal PE replicates :"+str(nPE))
+print("# \tTotal SE replicates :"+str(nSE))
+print("# Read access to all raw fastqs is confirmed!")
+print("#"*100)
+
+SAMPLE2REPLICATES=dict()
+for g in SAMPLES:
+    SAMPLE2REPLICATES[g]=list(REPLICATESDF[REPLICATESDF['sampleName']==g].index)
 
 # print(REPLICATESDF.columns)
 # print(REPLICATESDF.sampleName)
@@ -153,8 +162,10 @@ try:
 except KeyError:
     CLUSTERYAML = join(WORKDIR,"cluster.yaml")
 check_readaccess(CLUSTERYAML)
-with open(CLUSTERYAML) as json_file:
-    CLUSTER = json.load(json_file)
+# with open(CLUSTERYAML) as json_file:
+#     CLUSTER = json.load(json_file)
+with open(CLUSTERYAML) as f:
+    CLUSTER = yaml.safe_load(f)
 
 ## Create lambda functions to allow a way to insert read-in values
 ## as rule directives
@@ -176,23 +187,28 @@ print("# Resources dir :",RESOURCESDIR)
 print("# Cluster JSON :",CLUSTERYAML)
 
 GENOME=config["genome"]
-INDEXDIR=config[GENOME]["indexdir"]
-print("# Bowtie index dir:",INDEXDIR)
-
-GENOMEFILE=join(INDEXDIR,GENOME+".genome") # genome file is required by macs2 peak calling
-check_readaccess(GENOMEFILE)
 print("# Genome :",GENOME)
-print("# .genome :",GENOMEFILE)
 
-GENOMEFA=join(INDEXDIR,GENOME+".fa") # genome file is required by motif enrichment rule
-check_readaccess(GENOMEFA)
-print("# Genome fasta:",GENOMEFA)
+# GENOMEFA=join(INDEXDIR,GENOME+".fa") # genome file is required by motif enrichment rule
+# check_readaccess(GENOMEFA)
+# print("# Genome fasta:",GENOMEFA)
 
 QCDIR=join(RESULTSDIR,"QC")
 
-FASTQ_SCREEN_CONFIG=config["fastqscreen_config"]
-check_readaccess(FASTQ_SCREEN_CONFIG)
-print("# FQscreen config  :",FASTQ_SCREEN_CONFIG)
+# FASTQ_SCREEN_CONFIG=config["fastqscreen_config"]
+# check_readaccess(FASTQ_SCREEN_CONFIG)
+# print("# FQscreen config  :",FASTQ_SCREEN_CONFIG)
 
 
 #########################################################
+
+SETSTR=r"""set -exo pipefail"""
+
+TMPDIR_STR=r"""
+# set TMPDIR
+if [ -d /lscratch/${SLURM_JOB_ID} ];then
+    TMPDIR="/lscratch/${SLURM_JOB_ID}/{params.randomstr}"
+else
+    TMPDIR="/dev/shm/{params.randomstr}"
+fi
+"""
