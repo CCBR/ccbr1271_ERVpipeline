@@ -25,3 +25,7 @@ star_strict:
   mem: 220g
   gres: lscratch:256
   time: 00-12:00:00
+homer_class:
+  time: 00-06:00:00
+homer_locus:
+  time: 00-06:00:00

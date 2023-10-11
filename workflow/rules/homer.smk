@@ -27,3 +27,24 @@ makeTagDirectory \\
     {input.bam} \\
     -keepOne {params.strand_param}
 """
+
+rule homer_locus:
+    input:
+        bam             = join(WORKDIR,"results","STAR","{replicate}","strict","{replicate}.strict.Aligned.out.bam"),
+    output:
+        txt             = join(WORKDIR,"results","HOMER","{replicate}","locus","tagInfo.txt"),
+    params:
+        name            = "{replicate}",
+        peorse          = get_peorse,
+        strand_param    = get_strand_param,
+        randomstr       = str(uuid.uuid4()),
+    envmodules: TOOLS["homer"],TOOLS["samtools"],
+    shell:"""
+{SETSTR}
+{TMPDIR_STR}
+outdir=$(dirname {output.txt})
+
+makeTagDirectory \\
+    $outdir \\
+    {input.bam} {params.strand_param}
+"""

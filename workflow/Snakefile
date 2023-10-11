@@ -18,6 +18,9 @@ rule all:
         #homer class
         expand(join(WORKDIR,"results","HOMER","{replicate}","class","tagInfo.txt"),replicate=REPLICATES),
 
+        #homer locus
+        expand(join(WORKDIR,"results","HOMER","{replicate}","locus","tagInfo.txt"),replicate=REPLICATES),
+
         #megahit
         expand(join(WORKDIR,"results","megahit","{replicate}","{replicate}.contigs.fa"), replicate=REPLICATES),
 
