@@ -38,14 +38,14 @@ function print_banner() {
   versionnumber=$1
 cat << EOF
 
-╭━━━╮╱╱╱╱╭╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭━━━╮╱╱╭╮╱╱╱╱╱╱╭╮╱╱╭╮╱╱╱╱╱╱╱╱╭━━━╮╱╱╱╱╱╱╭╮
-┃╭━━╯╱╱╱╱┃┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃╭━╮┃╱╭╯╰╮╱╱╱╱╱┃╰╮╭╯┃╱╱╱╱╱╱╱╱┃╭━╮┃╱╱╱╱╱╱┃┃
-┃╰━━┳━╮╭━╯┣━━┳━━┳━━┳━╮╭━━┳━━┳╮╭┳━━╮┃╰━╯┣━┻╮╭╋━┳━━╮╰╮┃┃╭╋━┳╮╭┳━━╮┃╰━╯┣┳━━┳━━┫┃╭┳━╮╭━━╮
-┃╭━━┫╭╮┫╭╮┃╭╮┃╭╮┃┃━┫╭╮┫┃━┫╭╮┃┃┃┃━━┫┃╭╮╭┫┃━┫┃┃╭┫╭╮┃╱┃╰╯┣┫╭┫┃┃┃━━┫┃╭━━╋┫╭╮┃┃━┫┃┣┫╭╮┫┃━┫
-┃╰━━┫┃┃┃╰╯┃╰╯┃╰╯┃┃━┫┃┃┃┃━┫╰╯┃╰╯┣━━┃┃┃┃╰┫┃━┫╰┫┃┃╰╯┃╱╰╮╭┫┃┃┃╰╯┣━━┃┃┃╱╱┃┃╰╯┃┃━┫╰┫┃┃┃┃┃━┫
-╰━━━┻╯╰┻━━┻━━┻━╮┣━━┻╯╰┻━━┻━━┻━━┻━━╯╰╯╰━┻━━┻━┻╯╰━━╯╱╱╰╯╰┻╯╰━━┻━━╯╰╯╱╱╰┫╭━┻━━┻━┻┻╯╰┻━━╯
-╱╱╱╱╱╱╱╱╱╱╱╱╱╭━╯┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃
-╱╱╱╱╱╱╱╱╱╱╱╱╱╰━━╯╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰╯
+╭━━━╮╱╱╱╱╭╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭━━━╮╱╱╭╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭━━━╮╱╱╱╱╱╱╭╮
+┃╭━━╯╱╱╱╱┃┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃╭━╮┃╱╭╯╰╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃╭━╮┃╱╱╱╱╱╱┃┃
+┃╰━━┳━╮╭━╯┣━━┳━━┳━━┳━╮╭━━┳━━┳╮╭┳━━╮┃╰━╯┣━┻╮╭╋━┳━━┳╮╭┳┳━┳╮╭┳━━╮┃╰━╯┣┳━━┳━━┫┃╭┳━╮╭━━╮
+┃╭━━┫╭╮┫╭╮┃╭╮┃╭╮┃┃━┫╭╮┫┃━┫╭╮┃┃┃┃━━┫┃╭╮╭┫┃━┫┃┃╭┫╭╮┃╰╯┣┫╭┫┃┃┃━━┫┃╭━━╋┫╭╮┃┃━┫┃┣┫╭╮┫┃━┫
+┃╰━━┫┃┃┃╰╯┃╰╯┃╰╯┃┃━┫┃┃┃┃━┫╰╯┃╰╯┣━━┃┃┃┃╰┫┃━┫╰┫┃┃╰╯┣╮╭┫┃┃┃╰╯┣━━┃┃┃╱╱┃┃╰╯┃┃━┫╰┫┃┃┃┃┃━┫
+╰━━━┻╯╰┻━━┻━━┻━╮┣━━┻╯╰┻━━┻━━┻━━┻━━╯╰╯╰━┻━━┻━┻╯╰━━╯╰╯╰┻╯╰━━┻━━╯╰╯╱╱╰┫╭━┻━━┻━┻┻╯╰┻━━╯
+╱╱╱╱╱╱╱╱╱╱╱╱╱╭━╯┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃
+╱╱╱╱╱╱╱╱╱╱╱╱╱╰━━╯╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰╯
 ... v${versionnumber}
 EOF
 # generated using https://fsymbols.com/generators/carty/
@@ -69,6 +69,26 @@ sed -e "s/PIPELINE_HOME/${PIPELINE_HOME//\//\\/}/g" \
   -e "s/WORKDIR/${WORKDIR//\//\\/}/g" \
   -e "s/GENOME/${GENOME}/g" $f > $WORKDIR/$fbn
 }
+
+##########################################################################################
+
+function _cp_other_resources() {
+
+for f in ${PIPELINE_HOME}/resources/cluster.yaml ${PIPELINE_HOME}/resources/tools.yaml
+do
+  echo "Copying essential file: $f"
+  fbn=$(basename $f)
+  cp $f $WORKDIR/$fbn
+done
+
+# copy essential folders
+for f in $ESSENTIAL_FOLDERS;do
+  # rsync -az --progress ${PIPELINE_HOME}/$f $WORKDIR/
+  cp -rv ${PIPELINE_HOME}/$f ${WORKDIR}/
+done
+
+}
+
 
 ##########################################################################################
 
@@ -163,6 +183,7 @@ Required Arguments:
     ADVANCED RUNMODES (use with caution!!)
     * unlock    : unlock WORKDIR if locked by snakemake NEVER UNLOCK WORKDIR WHERE PIPELINE IS CURRENTLY RUNNING!
     * reconfig  : recreate config file in WORKDIR (debugging option) EDITS TO config.yaml WILL BE LOST!
+    * recopy    : recreate tools.yaml, cluster.yaml and scriptsdir in WORKDIR (debugging option) EDITS TO these files WILL BE LOST!
     * reset     : DELETE workdir dir and re-init it (debugging option) EDITS TO ALL FILES IN WORKDIR WILL BE LOST!
     * local     : same as runlocal
 
@@ -228,18 +249,9 @@ mkdir -p $WORKDIR
 _set_config
 echo "Set config.yaml"
 
-for f in $MANIFEST ${PIPELINE_HOME}/resources/cluster.yaml ${PIPELINE_HOME}/resources/tools.yaml
-do
-  echo "Copying essential file: $f"
-  fbn=$(basename $f)
-  cp $f $WORKDIR/$fbn
-done
+cp $MANIFEST $WORKDIR/samples.tsv
 
-# copy essential folders
-for f in $ESSENTIAL_FOLDERS;do
-  # rsync -az --progress ${PIPELINE_HOME}/$f $WORKDIR/
-  cp -rv ${PIPELINE_HOME}/$f ${WORKDIR}/
-done
+_cp_other_resources
 
 cd ${WORKDIR}
 curl https://raw.githubusercontent.com/CCBR/Tools/master/Biowulf/jobby -O
@@ -285,10 +297,18 @@ function reconfig(){
   # this is only for dev purposes when new key-value pairs are being 
   # updated in the config file in PIPELINE_HOME
 
-  check_essential_files
   _set_config
   echo "$WORKDIR/config.yaml has been updated!"
 
+}
+
+##########################################################################################
+# RECOPY ... recopy tools.yaml, cluster.yaml and scripts folder
+##########################################################################################
+
+function recopy() {
+  _cp_other_resources
+  echo "Done!"
 }
 
 ##########################################################################################
@@ -464,6 +484,7 @@ snakemake -s $SNAKEFILE \
 --configfile ${CONFIGFILE} \
 --cores all \
 --restart-times ${RETRIES} \
+${RERUNTRIGGERS} \
 --keep-going \
 --stats ${WORKDIR}/snakemake.stats \
 2>&1|tee ${WORKDIR}/snakemake.log
@@ -490,6 +511,7 @@ bash ${WORKDIR}/.${RAND_STR}
 #SBATCH --partition="norm"
 #SBATCH --time=96:00:00
 #SBATCH --cpus-per-task=2
+#SBATCH --gres=lscratch:48
 
 $MODULE_STR
 
@@ -506,6 +528,7 @@ snakemake -s $SNAKEFILE \
 -j 500 \
 --rerun-incomplete \
 --restart-times ${RETRIES} \
+${RERUNTRIGGERS} \
 --keep-going \
 --stats ${WORKDIR}/snakemake.stats \
 2>&1|tee ${WORKDIR}/snakemake.log
@@ -536,6 +559,7 @@ snakemake $1 -s $SNAKEFILE \
 --configfile $CONFIGFILE \
 --cluster-config $CLUSTERFILE \
 --cluster "$CLUSTER_SBATCH_CMD" \
+${RERUNTRIGGERS} \
 -j 500 \
 --rerun-incomplete \
 --keep-going \
@@ -543,8 +567,12 @@ snakemake $1 -s $SNAKEFILE \
 --stats ${WORKDIR}/snakemake.stats
 EOF
 
+if [ "$1" == "--dry-run" ];then 
+bash ${WORKDIR}/.${RAND_STR} > ${WORKDIR}/dryrun.log && rm -f ${WORKDIR}/.${RAND_STR}
+less ${WORKDIR}/dryrun.log
+else # unlock
 bash ${WORKDIR}/.${RAND_STR} && rm -f ${WORKDIR}/.${RAND_STR}
-
+fi
   fi
 
 }
@@ -607,14 +635,14 @@ function main(){
   esac
   done
   WORKDIR=$(readlink -f "$WORKDIR")
-  echo "Working Dir: $WORKDIR"
   if [[ -z $MANIFEST ]];then
     MANIFEST=${PIPELINE_HOME}/config/samples.tsv
   fi
   echo "Working Dir       : $WORKDIR"
   echo "Samples Manifest  : $MANIFEST"
-  CLUSTER_SBATCH_CMD="sbatch --cpus-per-task {cluster.threads} -p {cluster.partition} -t {cluster.time} --mem {cluster.mem} --job-name {cluster.name} --output {cluster.output} --error {cluster.error}"
+  CLUSTER_SBATCH_CMD="sbatch --cpus-per-task {cluster.threads} -p {cluster.partition} -t {cluster.time} --mem {cluster.mem} --job-name {cluster.name} --output {cluster.output} --error {cluster.error} --gres {cluster.gres}"
   RETRIES="2"
+  RERUNTRIGGERS="--rerun-triggers mtime"
   CONFIGFILE="${WORKDIR}/config.yaml"
   CLUSTERFILE="${WORKDIR}/cluster.yaml"
   JOBBY="${WORKDIR}/jobby"
@@ -630,6 +658,7 @@ function main(){
     dry) dryrun && exit 0;;                      # hidden option
     local) runlocal && exit 0;;                  # hidden option
     reconfig) reconfig && exit 0;;               # hidden option for debugging
+    recopy) recopy && exit 0;;                   # hidden option
     *) err "Unknown RUNMODE \"$RUNMODE\"";;
   esac
 
