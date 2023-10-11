@@ -12,7 +12,7 @@ import uuid
 
 
 #########################################################
-# FILE-ACTION FUNCTIONS 
+# FILE-ACTION FUNCTIONS
 #########################################################
 def check_existence(filename):
   if not os.path.exists(filename):
@@ -39,7 +39,7 @@ def get_file_size(filename):
 #########################################################
 CONFIGFILE = str(workflow.overwrite_configfiles[0])
 
-# set memory limit 
+# set memory limit
 # used for sambamba sort, etc
 # MEMORYG="100G"
 
@@ -61,10 +61,21 @@ except KeyError:
     RESOURCESDIR = join(WORKDIR,"resources")
 check_existence(RESOURCESDIR)
 
+# get INDEX folder
+try:
+    INDEXDIR = config["indexdir"]
+except KeyError:
+    os.exit('indexdir not defined in config.yaml!')
+check_existence(INDEXDIR)
+
 if not os.path.exists(join(WORKDIR,"fastqs")):
     os.mkdir(join(WORKDIR,"fastqs"))
 if not os.path.exists(RESULTSDIR):
     os.mkdir(RESULTSDIR)
+
+MEGAHITDIR=join(WORKDIR,"results","megahit")
+if not os.path.exists(MEGAHITDIR):
+    os.mkdir(MEGAHITDIR)
 
 # check read access to required files
 for f in ["samplemanifest"]:
@@ -206,9 +217,28 @@ SETSTR=r"""set -exo pipefail"""
 
 TMPDIR_STR=r"""
 # set TMPDIR
-if [ -d /lscratch/${SLURM_JOB_ID} ];then
-    TMPDIR="/lscratch/${SLURM_JOB_ID}/{params.randomstr}"
+# params.randomstr CANNOT be accessed from here hence
+# randstr needs to be created in bash
+randstr=$(shuf -er -n20  {A..Z} {a..z} {0..9} | tr -d '\n')
+if [ -w "/lscratch/${SLURM_JOB_ID}" ];then
+    TMPDIR="/lscratch/${SLURM_JOB_ID}/${randstr}"
 else
-    TMPDIR="/dev/shm/{params.randomstr}"
+    TMPDIR="/dev/shm/${randstr}"
 fi
+if [ ! -d $TMPDIR ];then mkdir -p $TMPDIR;fi
+echo "#########################################################"
+echo "TMPDIR=$TMPDIR"
+echo "#########################################################"
 """
+
+def get_input_fastqs(wildcards):
+    """
+    Return a dictionary of input files megahit rule, etc..
+    """
+    d=dict()
+    d["R1"]=REPLICATESDF["R1"][wildcards.replicate]
+    d["R2"]=REPLICATESDF["R2"][wildcards.replicate]
+    return d
+
+def get_peorse(wildcards):
+    return REPLICATESDF["PEorSE"][wildcards.replicate]
