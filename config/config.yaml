@@ -9,3 +9,4 @@ resourcesdir: "PIPELINE_HOME/resources"
 samplemanifest: "WORKDIR/samples.tsv"
 
 genome: "GENOME"
+indexdir: "/data/EVset_RNAseq/Pipelines/ERVPipeline/resources"
