@@ -1,4 +1,3 @@
-
 rule megahit:
     input:
         unpack(get_input_fastqs),

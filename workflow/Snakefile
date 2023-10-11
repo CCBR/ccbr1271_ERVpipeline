@@ -15,9 +15,13 @@ rule all:
         expand(join(WORKDIR,"results","STAR","{replicate}","strict","{replicate}.strict.Aligned.out.bam"),replicate=REPLICATES),
         expand(join(WORKDIR,"results","STAR","{replicate}","strict","{replicate}.strict.Unmapped.out.mate1.fastq.gz"),replicate=REPLICATES),
 
+        #homer class
+        expand(join(WORKDIR,"results","HOMER","{replicate}","class","tagInfo.txt"),replicate=REPLICATES),
+
         #megahit
         expand(join(WORKDIR,"results","megahit","{replicate}","{replicate}.contigs.fa"), replicate=REPLICATES),
 
 include: join("rules","qc.smk")
 include: join("rules","align.smk")
 include: join("rules","megahit.smk")
+include: join("rules","homer.smk")
