@@ -75,3 +75,30 @@ analyzeRepeats.pl \\
     -d $list_of_dirs \\
     > {output.counts}
 """
+
+rule annotate_locus:
+    input:
+        expand(join(WORKDIR,"results","HOMER","{replicate}","locus","tagInfo.txt"),replicate=REPLICATES),
+    output:
+        counts          = join(WORKDIR,"results","HOMER","counts","countsTable.locus.tsv"),
+    params:
+        genome          = GENOME,
+        randomstr       = str(uuid.uuid4()),
+    envmodules: TOOLS["homer"],TOOLS["samtools"],
+    shell:"""
+{SETSTR}
+{TMPDIR_STR}
+outdir=$(dirname {output.counts})
+
+list_of_dirs=""
+for i in {input};do
+    d=$(dirname $i)
+    list_of_dirs="$list_of_dirs $d"
+done
+
+analyzeRepeats.pl \\
+    repeats \\
+    {params.genome} \\
+    -d $list_of_dirs \\
+    > {output.counts}
+"""
