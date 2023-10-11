@@ -48,3 +48,30 @@ makeTagDirectory \\
     $outdir \\
     {input.bam} {params.strand_param}
 """
+
+rule annotate_class:
+    input:
+        expand(join(WORKDIR,"results","HOMER","{replicate}","class","tagInfo.txt"),replicate=REPLICATES),
+    output:
+        counts          = join(WORKDIR,"results","HOMER","counts","countsTable.class.tsv"),
+    params:
+        genome          = GENOME,
+        randomstr       = str(uuid.uuid4()),
+    envmodules: TOOLS["homer"],TOOLS["samtools"],
+    shell:"""
+{SETSTR}
+{TMPDIR_STR}
+outdir=$(dirname {output.counts})
+
+list_of_dirs=""
+for i in {input};do
+    d=$(dirname $i)
+    list_of_dirs="$list_of_dirs $d"
+done
+
+analyzeRepeats.pl \\
+    repeats \\
+    {params.genome} \\
+    -d $list_of_dirs \\
+    > {output.counts}
+"""

@@ -17,6 +17,7 @@ rule all:
 
         #homer class
         expand(join(WORKDIR,"results","HOMER","{replicate}","class","tagInfo.txt"),replicate=REPLICATES),
+        join(WORKDIR,"results","HOMER","counts","countsTable.class.tsv"),
 
         #homer locus
         expand(join(WORKDIR,"results","HOMER","{replicate}","locus","tagInfo.txt"),replicate=REPLICATES),
