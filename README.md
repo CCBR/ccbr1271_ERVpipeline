@@ -2,8 +2,7 @@
 
 ### Table of Contents
 
-- [RENEE - **R**na s**E**quencing a**N**alysis pip**E**lin**E**](#renee---rna-sequencing-analysis-pipeline)
-  - [Table of Contents](#table-of-contents)
+- [Table of Contents](#table-of-contents)
   - [1. Disclaimers](#1-disclaimers)
   - [2. Background](#2-background)
   - [3. Flowchart](#3-flowchart)
@@ -37,7 +36,7 @@ To be added!
 
 ### 3. Flowchart
 
-To be added!
+![Flowchart](./docs/assets/images/ccbr1271_ERV_pipeline.png)
 
 <hr>
 <p align="center">
