@@ -29,3 +29,6 @@ homer_class:
   time: 00-06:00:00
 homer_locus:
   time: 00-06:00:00
+diamond_blastx:
+  threads: 16
+  time: 00-06:00:00

@@ -36,3 +36,52 @@ fi
 # recover 80+ percent of disk space
 if [[ -d "${outdir}/intermediate_contigs" ]]; then rm -rf ${outdir}/intermediate_contigs;fi
 """
+
+rule diamond_blastx:
+    input:
+        fa          = join(WORKDIR,"results","megahit","{replicate}","{replicate}.contigs.fa"),
+    output:
+        dmnd_out    = join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.tsv")
+    params:
+        name        = "{replicate}",
+        randomstr   = str(uuid.uuid4()),
+        dmnd_nr     = join(INDEXDIR,"nr","nr.dmnd"),
+    threads: getthreads("diamond_blastx")
+    envmodules: TOOLS["diamond"]
+    shell:"""
+{SETSTR}
+{TMPDIR_STR}
+outdir=$(dirname {output.dmnd_out})
+
+diamond \\
+    blastx \\
+    -d {params.dmnd_nr} \\
+    -q {input.fa} \\
+    -p {threads} \\
+    --outfmt 6 \\
+    -o {output.dmnd_out} \\
+    -k 2 \\
+    --strand both
+"""
+
+rule diamond_blastx_get_metadata:
+    input:
+        dmnd_in     = join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.tsv"),
+    output:
+        dmnd_out    = join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.taxid.tsv")
+    params:
+        name        = "{replicate}",
+        randomstr   = str(uuid.uuid4()),
+        scriptsdir  = SCRIPTSDIR,
+        script      = "get_taxid.py",
+    threads: getthreads("diamond_blastx")
+    envmodules: TOOLS["diamond"]
+    shell:"""
+{SETSTR}
+{TMPDIR_STR}
+outdir=$(dirname {output.dmnd_out})
+
+cat {input.dmnd_in} | \\
+    python {params.scriptsdir}/{params.script} \\
+    > {output.dmnd_out}
+"""
