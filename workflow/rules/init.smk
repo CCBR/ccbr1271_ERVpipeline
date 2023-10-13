@@ -5,13 +5,14 @@ import sys
 import os
 import pandas as pd
 import yaml
+import uuid
 # import glob
 # import shutil
 #########################################################
 
 
 #########################################################
-# FILE-ACTION FUNCTIONS 
+# FILE-ACTION FUNCTIONS
 #########################################################
 def check_existence(filename):
   if not os.path.exists(filename):
@@ -38,7 +39,7 @@ def get_file_size(filename):
 #########################################################
 CONFIGFILE = str(workflow.overwrite_configfiles[0])
 
-# set memory limit 
+# set memory limit
 # used for sambamba sort, etc
 # MEMORYG="100G"
 
@@ -60,10 +61,21 @@ except KeyError:
     RESOURCESDIR = join(WORKDIR,"resources")
 check_existence(RESOURCESDIR)
 
+# get INDEX folder
+try:
+    INDEXDIR = config["indexdir"]
+except KeyError:
+    os.exit('indexdir not defined in config.yaml!')
+check_existence(INDEXDIR)
+
 if not os.path.exists(join(WORKDIR,"fastqs")):
     os.mkdir(join(WORKDIR,"fastqs"))
 if not os.path.exists(RESULTSDIR):
     os.mkdir(RESULTSDIR)
+
+MEGAHITDIR=join(WORKDIR,"results","megahit")
+if not os.path.exists(MEGAHITDIR):
+    os.mkdir(MEGAHITDIR)
 
 # check read access to required files
 for f in ["samplemanifest"]:
@@ -77,48 +89,56 @@ for f in ["samplemanifest"]:
 # each line in the samplemanifest is a replicate
 # multiple replicates belong to a sample
 # currently only 1,2,3 or 4 replicates per sample is supported
-# REPLICATESDF = pd.read_csv(config["samplemanifest"],sep="\t",header=0,index_col="replicateName")
-# REPLICATES = list(REPLICATESDF.index)
-# SAMPLES = list(REPLICATESDF.sampleName.unique())
+REPLICATESDF = pd.read_csv(config["samplemanifest"],sep="\t",header=0,index_col="replicateName")
+REPLICATES = list(REPLICATESDF.index)
+SAMPLES = list(REPLICATESDF.sampleName.unique())
 
-# print("#"*100)
-# print("# Checking Sample Manifest...")
-# print("# \tTotal Replicates in manifest : "+str(len(REPLICATES)))
-# print("# \tTotal Samples in manifest : "+str(len(SAMPLES)))
-# print("# Checking read access to raw fastqs...")
+print("#"*100)
+print("# Checking Sample Manifest...")
+print("# \tTotal Replicates in manifest : "+str(len(REPLICATES)))
+print("# \tTotal Samples in manifest : "+str(len(SAMPLES)))
+print("# Checking read access to raw fastqs...")
 
-# REPLICATESDF["R1"]=join(RESOURCESDIR,"dummy")
-# REPLICATESDF["R2"]=join(RESOURCESDIR,"dummy")
-# REPLICATESDF["PEorSE"]="PE"
 
-# for replicate in REPLICATES:
-#     R1file=REPLICATESDF["path_to_R1_fastq"][replicate]
-#     R2file=REPLICATESDF["path_to_R2_fastq"][replicate]
-#     # print(replicate,R1file,R2file)
-#     check_readaccess(R1file)
-#     R1filenewname=join(WORKDIR,"fastqs",replicate+".R1.fastq.gz")
-#     if not os.path.exists(R1filenewname):
-#         os.symlink(R1file,R1filenewname)
-#     REPLICATESDF.loc[[replicate],"R1"]=R1filenewname
-#     if str(R2file)!='nan':
-#         check_readaccess(R2file)
-#         R2filenewname=join(WORKDIR,"fastqs",replicate+".R2.fastq.gz")
-#         if not os.path.exists(R2filenewname):
-#             os.symlink(R2file,R2filenewname)
-#         REPLICATESDF.loc[[replicate],"R2"]=R2filenewname
-#     else:
-# # only PE samples are supported by the ATACseq pipeline at the moment
-#         print("# Only Paired-end samples are supported by this pipeline!")
-#         print("# "+config["samplemanifest"]+" is missing second fastq file for "+replicate)
-#         exit()
-#         REPLICATESDF.loc[[replicate],"PEorSE"]="SE"
+DUMMYFILE=join(RESOURCESDIR,"dummy")
+REPLICATESDF["R1"]=DUMMYFILE
+REPLICATESDF["R2"]=DUMMYFILE
+REPLICATESDF["PEorSE"]="PE"
 
-# print("# Read access to all raw fastqs is confirmed!")
-# print("#"*100)
+nPE=0
+nSE=0
+ALLINPUTFASTQS=list()
+for replicate in REPLICATES:
+    R1file=REPLICATESDF["path_to_R1_fastq"][replicate]
+    R2file=REPLICATESDF["path_to_R2_fastq"][replicate]
+    # print(replicate,R1file,R2file)
+    check_readaccess(R1file)
+    R1filenewname=join(WORKDIR,"fastqs",replicate+".R1.fastq.gz")
+    if not os.path.exists(R1filenewname):
+        os.symlink(R1file,R1filenewname)
+    REPLICATESDF.loc[[replicate],"R1"]=R1filenewname
+    ALLINPUTFASTQS.append(R1filenewname)
+    if str(R2file)!='nan':
+        check_readaccess(R2file)
+        R2filenewname=join(WORKDIR,"fastqs",replicate+".R2.fastq.gz")
+        if not os.path.exists(R2filenewname):
+            os.symlink(R2file,R2filenewname)
+        REPLICATESDF.loc[[replicate],"R2"]=R2filenewname
+        nPE+=1
+        ALLINPUTFASTQS.append(R2filenewname)
+    else:
+        REPLICATESDF.loc[[replicate],"PEorSE"]="SE"
+        REPLICATESDF.loc[[replicate],"R2"]=DUMMYFILE
+        nSE+=1
 
-# SAMPLE2REPLICATES=dict()
-# for g in SAMPLES:
-#     SAMPLE2REPLICATES[g]=list(REPLICATESDF[REPLICATESDF['sampleName']==g].index)
+print("# \tTotal PE replicates :"+str(nPE))
+print("# \tTotal SE replicates :"+str(nSE))
+print("# Read access to all raw fastqs is confirmed!")
+print("#"*100)
+
+SAMPLE2REPLICATES=dict()
+for g in SAMPLES:
+    SAMPLE2REPLICATES[g]=list(REPLICATESDF[REPLICATESDF['sampleName']==g].index)
 
 # print(REPLICATESDF.columns)
 # print(REPLICATESDF.sampleName)
@@ -153,8 +173,10 @@ try:
 except KeyError:
     CLUSTERYAML = join(WORKDIR,"cluster.yaml")
 check_readaccess(CLUSTERYAML)
-with open(CLUSTERYAML) as json_file:
-    CLUSTER = json.load(json_file)
+# with open(CLUSTERYAML) as json_file:
+#     CLUSTER = json.load(json_file)
+with open(CLUSTERYAML) as f:
+    CLUSTER = yaml.safe_load(f)
 
 ## Create lambda functions to allow a way to insert read-in values
 ## as rule directives
@@ -176,23 +198,47 @@ print("# Resources dir :",RESOURCESDIR)
 print("# Cluster JSON :",CLUSTERYAML)
 
 GENOME=config["genome"]
-INDEXDIR=config[GENOME]["indexdir"]
-print("# Bowtie index dir:",INDEXDIR)
-
-GENOMEFILE=join(INDEXDIR,GENOME+".genome") # genome file is required by macs2 peak calling
-check_readaccess(GENOMEFILE)
 print("# Genome :",GENOME)
-print("# .genome :",GENOMEFILE)
 
-GENOMEFA=join(INDEXDIR,GENOME+".fa") # genome file is required by motif enrichment rule
-check_readaccess(GENOMEFA)
-print("# Genome fasta:",GENOMEFA)
+# GENOMEFA=join(INDEXDIR,GENOME+".fa") # genome file is required by motif enrichment rule
+# check_readaccess(GENOMEFA)
+# print("# Genome fasta:",GENOMEFA)
 
 QCDIR=join(RESULTSDIR,"QC")
 
-FASTQ_SCREEN_CONFIG=config["fastqscreen_config"]
-check_readaccess(FASTQ_SCREEN_CONFIG)
-print("# FQscreen config  :",FASTQ_SCREEN_CONFIG)
+# FASTQ_SCREEN_CONFIG=config["fastqscreen_config"]
+# check_readaccess(FASTQ_SCREEN_CONFIG)
+# print("# FQscreen config  :",FASTQ_SCREEN_CONFIG)
 
 
 #########################################################
+
+SETSTR=r"""set -exo pipefail"""
+
+TMPDIR_STR=r"""
+# set TMPDIR
+# params.randomstr CANNOT be accessed from here hence
+# randstr needs to be created in bash
+randstr=$(shuf -er -n20  {A..Z} {a..z} {0..9} | tr -d '\n')
+if [ -w "/lscratch/${SLURM_JOB_ID}" ];then
+    TMPDIR="/lscratch/${SLURM_JOB_ID}/${randstr}"
+else
+    TMPDIR="/dev/shm/${randstr}"
+fi
+if [ ! -d $TMPDIR ];then mkdir -p $TMPDIR;fi
+echo "#########################################################"
+echo "TMPDIR=$TMPDIR"
+echo "#########################################################"
+"""
+
+def get_input_fastqs(wildcards):
+    """
+    Return a dictionary of input files megahit rule, etc..
+    """
+    d=dict()
+    d["R1"]=REPLICATESDF["R1"][wildcards.replicate]
+    d["R2"]=REPLICATESDF["R2"][wildcards.replicate]
+    return d
+
+def get_peorse(wildcards):
+    return REPLICATESDF["PEorSE"][wildcards.replicate]

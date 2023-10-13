@@ -4,5 +4,35 @@ include: join("rules","init.smk")
 localrules: all
 rule all:
     input:
+        #fastqc
+        expand(join(QCDIR,"fastqc","{replicate}.R1_fastqc.zip"), replicate=REPLICATES),
 
-include: join("rules","dummy.smk")
+        #star loose
+        expand(join(WORKDIR,"results","STAR","{replicate}","loose","{replicate}.loose.Aligned.out.bam"),replicate=REPLICATES),
+        expand(join(WORKDIR,"results","STAR","{replicate}","loose","{replicate}.loose.Unmapped.out.mate1.fastq.gz"),replicate=REPLICATES),
+
+        #star strict
+        expand(join(WORKDIR,"results","STAR","{replicate}","strict","{replicate}.strict.Aligned.out.bam"),replicate=REPLICATES),
+        expand(join(WORKDIR,"results","STAR","{replicate}","strict","{replicate}.strict.Unmapped.out.mate1.fastq.gz"),replicate=REPLICATES),
+
+        #homer class
+        expand(join(WORKDIR,"results","HOMER","{replicate}","class","tagInfo.txt"),replicate=REPLICATES),
+        join(WORKDIR,"results","HOMER","counts","countsTable.class.tsv"),
+        join(WORKDIR,"results","HOMER","counts","countsTable.class.geve.tsv"),
+
+        #homer locus
+        expand(join(WORKDIR,"results","HOMER","{replicate}","locus","tagInfo.txt"),replicate=REPLICATES),
+        join(WORKDIR,"results","HOMER","counts","countsTable.locus.tsv"),
+        join(WORKDIR,"results","HOMER","counts","countsTable.locus.geve.tsv"),
+
+        #megahit
+        expand(join(WORKDIR,"results","megahit","{replicate}","{replicate}.contigs.fa"), replicate=REPLICATES),
+
+        #diamond
+        expand(join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.tsv"),replicate=REPLICATES),
+        # expand(join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.taxid.tsv"),replicate=REPLICATES),
+
+include: join("rules","qc.smk")
+include: join("rules","align.smk")
+include: join("rules","megahit.smk")
+include: join("rules","homer.smk")
