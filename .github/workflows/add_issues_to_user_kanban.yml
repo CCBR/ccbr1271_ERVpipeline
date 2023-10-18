@@ -1,4 +1,4 @@
-name: Add issues/PRs to user projects
+name: Add to personal projects
 
 on:
   issues:
