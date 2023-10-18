@@ -1,0 +1,34 @@
+# cluster configuration
+###################################################################
+__default__:
+  gres: lscratch:96
+  mem: 40g
+  partition: norm
+  time: 00-02:00:00
+  threads: 2
+  name: "{rule}.{wildcards}"
+  output: "logs/{rule}.${{SLURM_JOBID}}.%j.{wildcards}.out"
+  error: "logs/{rule}.${{SLURM_JOBID}}.%j.{wildcards}.err"
+fastqc:
+  threads: 16
+megahit:
+  threads: 32
+  mem: 220g
+  time: 00-12:00:00
+star_loose:
+  threads: 32
+  mem: 220g
+  gres: lscratch:256
+  time: 00-12:00:00
+star_strict:
+  threads: 32
+  mem: 220g
+  gres: lscratch:256
+  time: 00-12:00:00
+homer_class:
+  time: 00-06:00:00
+homer_locus:
+  time: 00-06:00:00
+diamond_blastx:
+  threads: 16
+  time: 00-06:00:00
