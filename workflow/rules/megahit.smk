@@ -5,6 +5,7 @@ rule megahit:
         fa          = join(WORKDIR,"results","megahit","{replicate}","{replicate}.contigs.fa")
     params:
         name        = "{replicate}",
+        outdir      = join(WORKDIR,"results","megahit","{replicate}"),
         peorse      = get_peorse,
         randomstr   = str(uuid.uuid4()),
     threads: getthreads("megahit")
@@ -12,29 +13,28 @@ rule megahit:
     shell:"""
 {SETSTR}
 {TMPDIR_STR}
-outdir=$(dirname {output.fa})
 
-if [[ -d $outdir ]];then rm -rf $outdir;fi
+if [[ -d {params.outdir} ]];then rm -rf {params.outdir};fi
 
 if [[ "{params.peorse}" == "PE" ]];then
     megahit \\
         -t{threads} \\
         -1 {input.R1} \\
         -2 {input.R2} \\
-        --out-dir $outdir \\
+        --out-dir {params.outdir} \\
         --out-prefix {params.name} \\
         --tmp-dir $TMPDIR
 else
     megahit \\
         -t{threads} \\
         --read {input.R1} \\
-        --out-dir $outdir \\
+        --out-dir {params.outdir} \\
         --out-prefix {params.name} \\
         --tmp-dir $TMPDIR
 fi
 
 # recover 80+ percent of disk space
-if [[ -d "${outdir}/intermediate_contigs" ]]; then rm -rf ${outdir}/intermediate_contigs;fi
+if [[ -d "{params.outdir}/intermediate_contigs" ]]; then rm -rf {params.outdir}/intermediate_contigs;fi
 """
 
 rule diamond_blastx:
