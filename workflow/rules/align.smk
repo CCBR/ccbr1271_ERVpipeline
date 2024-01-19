@@ -1,6 +1,6 @@
 rule star_loose:
     input:
-        unpack(get_input_fastqs),
+        ancient(unpack(get_input_fastqs)),
     output:
         bam             = join(WORKDIR,"results","STAR","{replicate}","loose","{replicate}.loose.Aligned.out.bam"),
         unmappedR1      = join(WORKDIR,"results","STAR","{replicate}","loose","{replicate}.loose.Unmapped.out.mate1.fastq.gz"),
@@ -65,7 +65,7 @@ done
 
 rule star_strict:
     input:
-        unpack(get_input_fastqs),
+        ancient(unpack(get_input_fastqs)),
     output:
         bam             = join(WORKDIR,"results","STAR","{replicate}","strict","{replicate}.strict.Aligned.out.bam"),
         unmappedR1      = join(WORKDIR,"results","STAR","{replicate}","strict","{replicate}.strict.Unmapped.out.mate1.fastq.gz"),
