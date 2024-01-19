@@ -1,5 +1,7 @@
 ## Development Version
 
+## v1.0.0
+
 - feat: add annotation to HOMER output #12
 - feat: add taxid info to diamond output #15
 - feat: assemble reads with megahit #18
