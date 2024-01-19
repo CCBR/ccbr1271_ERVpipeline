@@ -62,22 +62,6 @@ STAR indices were built using version 2.7.9a and located at `/data/EVset_RNAseq/
 ⠠⠵ ln Hsap38.txt hg38.geve.annotation_table.tsv
 ```
 
-### DIAMOND index
-
-```bash
-⠠⠵ module load diamond
-⠠⠵ diamond makedb \
-    --threads 56 \
-    --in nr.gz \
-    --db nr \
-    --taxonmap prot.accession2taxid.FULL.gz \
-    --taxonnodes nodes.dmp \
-    --taxonnames names.dmp
-```
-
-- creates `nr.dmnd`
-- it is about 300 GB in size
-
 ### Creating taxid-to-lineage lookup
 
 #### Download .dmp files
@@ -215,6 +199,22 @@ conda activate py311
 ncbitax2lin --nodes-file nodes.dmp --names-file names.dmp --output ncbi_lineages.csv.gz
 ```
 
+### DIAMOND index
+
+```bash
+⠠⠵ module load diamond
+⠠⠵ diamond makedb \
+    --threads 56 \
+    --in nr.gz \
+    --db nr \
+    --taxonmap prot.accession2taxid.FULL.gz \
+    --taxonnodes nodes.dmp \
+    --taxonnames names.dmp
+```
+
+- creates `nr.dmnd`
+- it is about 300 GB in size
+
 ### Creating list of all protein accession ids in NR
 
 #### Download entire nr
@@ -325,3 +325,7 @@ All the 596 updated files can be read into a single dict and saved as pickle for
 
 - `nr_titles.pkl` is ~ 72GB is size
 - requires about 200 GB of RAM to load
+
+### DIAMOND annotation workflow
+
+![workflow](./assets/images/diamond_annotation_workflow.png)
