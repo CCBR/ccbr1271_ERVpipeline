@@ -1,12 +1,12 @@
 # Project Information
-site_name: PIPELINENAME Pipeline
-site_author: Samantha Sevilla, Ph.D.
+site_name: ccbr1271_ERVpipeline Pipeline
+site_author: Vishal Koparde, Ph.D.
 site_description: >-
-  PIPELINENAME Pipeline
+  ccbr1271_ERVpipeline Pipeline
 # Repository
-repo_name: CCBR/PIPELINENAME
-repo_url: https://github.com/CCBR/PIPELINENAME
-edit_uri: https://github.com/CCBR/PIPELINENAME/edit/main/docs/
+repo_name: CCBR/ccbr1271_ERVpipeline
+repo_url: https://github.com/CCBR/ccbr1271_ERVpipeline
+edit_uri: https://github.com/CCBR/ccbr1271_ERVpipeline/edit/main/docs/
 
 # Copyright
 copyright: Copyright &copy; 2022 CCBR
@@ -92,12 +92,6 @@ markdown_extensions:
 # Page Tree
 nav:
   - Background: index.md
-  - Usage:
-      - 1. Getting Started: user-guide/getting-started.md
-      - 2. Preparing Files: user-guide/preparing-files.md
-      - 3. Running the Pipeline: user-guide/run.md
-      - 4. Expected Output: user-guide/output.md
-      - 5. Running Test Data: user-guide/test-info.md
-  - FAQ:
-      - Troubleshooting: user-guide/troubleshooting.md
-      - Contributions: user-guide/contributions.md
+  - Flowchart: flowchart.md
+  - Usage: usage.md
+  - Resources: resources.md
