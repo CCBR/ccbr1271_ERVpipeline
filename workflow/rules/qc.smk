@@ -8,7 +8,7 @@ rule fastqc:
 # * Blacklist filtered trimmed fastqs
 # """
     input:
-        unpack(get_all_fastqs),
+        ancient(unpack(get_all_fastqs)),
     output:
         expand(join(QCDIR,"fastqc","{replicate}.R1_fastqc.zip"), replicate=REPLICATES),
     params:
@@ -20,6 +20,6 @@ rule fastqc:
 {SETSTR}
 {TMPDIR_STR}
 fastqc {input} -t {threads} -o {params.outdir};
-"""      
+"""
 
 #########################################################
