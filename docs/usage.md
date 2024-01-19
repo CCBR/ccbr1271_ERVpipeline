@@ -1,54 +1,4 @@
-# ERV identification, annotation and quantification pipeline built for ccbr1271
-
-### Table of Contents
-
-- [Table of Contents](#table-of-contents)
-  - [1. Disclaimers](#1-disclaimers)
-  - [2. Background](#2-background)
-  - [3. Flowchart](#3-flowchart)
-  - [4. Technical Details](#4-technical-details)
-    - [4.1 Usage](#41-usage)
-    - [4.2 Resources](#42-resources)
-    - [4.3 Location](#43-location)
-  - [5. Version Notes](https://github.com/CCBR/RENEE/blob/main/CHANGELOG.md)
-
-### 1. Disclaimers
-
-> DISCLAIMERS:
->
-> - Built specifically for [ccbr1271](https://abcs-amp.nih.gov/project/2487/view/) analysis
-> - Tested only on [BIOWULF](https://hpc.nih.gov/)
-> - Uses BIOWULF [modules](https://hpc.nih.gov/apps/modules.html)
-
-<hr>
-<p align="center">
-	<a href="#erv-identification-annotation-and-quantification-pipeline-built-for-ccbr1271">Back to Top</a>
-</p>
-<hr>
-
-### 2. Background
-
-This pipeline detects and quantifies Endogenous Retroviruses using the scripts obtained from the Belkaid group.
-
-<hr>
-<p align="center">
-	<a href="#erv-identification-annotation-and-quantification-pipeline-built-for-ccbr1271">Back to Top</a>
-</p>
-<hr>
-
-### 3. Flowchart
-
-![Flowchart](./docs/assets/images/ccbr1271_ERV_pipeline.png)
-
-<hr>
-<p align="center">
-	<a href="#erv-identification-annotation-and-quantification-pipeline-built-for-ccbr1271">Back to Top</a>
-</p>
-<hr>
-
-### 4. Technical Details
-
-#### 4.1 Usage
+The code for this pipeline us located at `/data/EVset_RNAseq/Pipelines/ERVPipeline/<version_number>` on BIOWULF.
 
 ```bash
 ⠠⠵ ./erv
@@ -120,26 +70,12 @@ VersionInfo:
 ##########################################################################################
 ```
 
-<hr>
-<p align="center">
-	<a href="#erv-identification-annotation-and-quantification-pipeline-built-for-ccbr1271">Back to Top</a>
-</p>
-<hr>
+### Inputs
 
-#### 4.2 Resources
+Samples are assumed to be single-end or paired-end fastqs which have already been adapter and UMI-trimmed. Intermediate fastqs from the [longRNA pipeline](https://github.com/CCBR/ccbr1271_longRNA) can be used as inputs. The sample manifest is expected to be tab-delimited with these columns headers:
 
-Please see [resources](!./docs/resources.md) page for details.
-
-#### 4.3 Location
-
-This pipeline is located at `/data/EVset_RNAseq/Pipelines/ERVPipeline` on [BIOWULF](https://hpc.nih.gov).
-
-Refer complete [documentation](https://ccbr.github.io/ccbr1271_ERVpipeline/) for more details.
-
-<hr>
-<p align="center">
-	<a href="#erv-identification-annotation-and-quantification-pipeline-built-for-ccbr1271">Back to Top</a>
-</p>
-<hr>
-
-> Please reach out to [Vishal Koparde, Ph.D.](mailto:vishal.koparde@nih.gov) from [CCBR](https://bioinformatics.ccr.cancer.gov/ccbr) for comments/questions/requests/etc.
+- replicateName
+- sampleName
+- stranded (Y or N)
+- path_to_R1_fastq
+- path_to_R2_fastq

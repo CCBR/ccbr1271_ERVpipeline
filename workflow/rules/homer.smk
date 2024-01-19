@@ -132,6 +132,29 @@ analyzeRepeats.pl \\
     > {output.counts}
 """
 
+rule annotate_class_geve_w_annotation_table:
+    input:
+        counts              =   join(WORKDIR,"results","HOMER","counts","countsTable.class.geve.tsv"),
+    output:
+        annotated_counts    =   join(WORKDIR,"results","HOMER","counts","countsTable.class.geve.annotated.tsv"),
+    params:
+        rscript             =   join(SCRIPTSDIR,"annotate_counts.R"),
+        genome              =   GENOME,
+        geve_annotable      =   join(INDEXDIR,GENOME,GENOME+'.geve.annotation_table.tsv'),
+        randomstr           =   str(uuid.uuid4()),
+    envmodules: TOOLS["R"]
+    shell:"""
+{SETSTR}
+{TMPDIR_STR}
+outdir=$(dirname {output.annotated_counts})
+cd $outdir
+
+Rscript {params.rscript} \\
+    --count {input.counts} \\
+    --anno {params.geve_annotable} \\
+    --outfile {output.annotated_counts}
+"""
+
 rule annotate_locus_geve:
     input:
         expand(join(WORKDIR,"results","HOMER","{replicate}","locus","tagInfo.txt"),replicate=REPLICATES),
@@ -159,4 +182,27 @@ analyzeRepeats.pl \\
     -count genes -noadj \\
     -d $list_of_dirs \\
     > {output.counts}
+"""
+
+rule annotate_locus_geve_w_annotation_table:
+    input:
+        counts              =   join(WORKDIR,"results","HOMER","counts","countsTable.locus.geve.tsv"),
+    output:
+        annotated_counts    =   join(WORKDIR,"results","HOMER","counts","countsTable.locus.geve.annotated.tsv"),
+    params:
+        rscript             =   join(SCRIPTSDIR,"annotate_counts.R"),
+        genome              =   GENOME,
+        geve_annotable      =   join(INDEXDIR,GENOME,GENOME+'.geve.annotation_table.tsv'),
+        randomstr           =   str(uuid.uuid4()),
+    envmodules: TOOLS["R"]
+    shell:"""
+{SETSTR}
+{TMPDIR_STR}
+outdir=$(dirname {output.annotated_counts})
+cd $outdir
+
+Rscript {params.rscript} \\
+    --count {input.counts} \\
+    --anno {params.geve_annotable} \\
+    --outfile {output.annotated_counts}
 """
