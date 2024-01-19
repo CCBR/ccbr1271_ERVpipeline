@@ -32,3 +32,12 @@ homer_locus:
 diamond_blastx:
   threads: 16
   time: 00-06:00:00
+hervquant:
+  gres: lscratch:220
+  threads: 56
+  time: 02-00:00:00
+annotate_diamond:
+  threads: 1
+  mem: 400g
+  partition: largemem
+  time: 00-12:00:00

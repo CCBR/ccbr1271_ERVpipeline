@@ -64,24 +64,52 @@ diamond \\
     --strand both
 """
 
-rule diamond_blastx_get_metadata:
+rule annotate_diamond:
     input:
         dmnd_in     = join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.tsv"),
     output:
-        dmnd_out    = join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.taxid.tsv")
+        dmnd_out    = temp(join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.annotated.tsv.tmp"))
     params:
         name        = "{replicate}",
         randomstr   = str(uuid.uuid4()),
-        scriptsdir  = SCRIPTSDIR,
-        script      = "get_taxid.py",
-    threads: getthreads("diamond_blastx")
-    envmodules: TOOLS["diamond"]
+        script      = join(SCRIPTSDIR,"annotate_diamond.py"),
+        accid2taxid = config["accid2taxid"],
+        taxid2lineage = config["taxid2lineage"],
+        nrtitles    = config["nrtitles"],
+    threads: getthreads("annotate_diamond")
+    envmodules: TOOLS["python"]
     shell:"""
 {SETSTR}
 {TMPDIR_STR}
 outdir=$(dirname {output.dmnd_out})
 
-cat {input.dmnd_in} | \\
-    python {params.scriptsdir}/{params.script} \\
-    > {output.dmnd_out}
+python {params.script} \\
+	-d {input.dmnd_in} \\
+	-p {params.accid2taxid} \\
+	-l {params.taxid2lineage} \\
+	-t {params.nrtitles} \\
+	-o {output.dmnd_out}
+"""
+
+rule reannotate_diamond:
+    input:
+        dmnd_in     = join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.annotated.tsv.tmp"),
+    output:
+        dmnd_out    = join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.annotated.tsv")
+    params:
+        name        = "{replicate}",
+        randomstr   = str(uuid.uuid4()),
+        script      = join(SCRIPTSDIR,"reprocess_annotated_diamond.py"),
+        taxid2lineage = config["taxid2lineage"],
+    threads: getthreads("reannotate_diamond")
+    envmodules: TOOLS["python"]
+    shell:"""
+{SETSTR}
+{TMPDIR_STR}
+outdir=$(dirname {output.dmnd_out})
+
+python {params.script} \\
+        -a {input.dmnd_in} \\
+        -l {params.taxid2lineage} \\
+        -o {output.dmnd_out}
 """

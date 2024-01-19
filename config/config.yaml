@@ -10,3 +10,7 @@ samplemanifest: "WORKDIR/samples.tsv"
 
 genome: "GENOME"
 indexdir: "/data/EVset_RNAseq/Pipelines/ERVPipeline/resources"
+
+accid2taxid: "/data/EVset_RNAseq/Pipelines/ERVPipeline/resources/nr/accid2taxid.pkl"
+taxid2lineage: "/data/EVset_RNAseq/Pipelines/ERVPipeline/resources/taxadb/ncbi_lineages.csv.gz"
+nrtitles: "/data/EVset_RNAseq/Pipelines/ERVPipeline/resources/nr/nr_titles.pkl"

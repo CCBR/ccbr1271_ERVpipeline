@@ -1,12 +1,12 @@
 # Project Information
-site_name: PIPELINENAME Pipeline
-site_author: Samantha Sevilla, Ph.D.
+site_name: ccbr1271_ERVpipeline Pipeline
+site_author: Vishal Koparde, Ph.D.
 site_description: >-
-  PIPELINENAME Pipeline
+  ccbr1271_ERVpipeline Pipeline
 # Repository
-repo_name: CCBR/PIPELINENAME
-repo_url: https://github.com/CCBR/PIPELINENAME
-edit_uri: https://github.com/CCBR/PIPELINENAME/edit/main/docs/
+repo_name: CCBR/ccbr1271_ERVpipeline
+repo_url: https://github.com/CCBR/ccbr1271_ERVpipeline
+edit_uri: https://github.com/CCBR/ccbr1271_ERVpipeline/edit/main/docs/
 
 # Copyright
 copyright: Copyright &copy; 2022 CCBR
@@ -18,7 +18,7 @@ theme:
     - navigation.tabs
     - navigation.top
     - navigation.indexes
-    - toc.integrate 
+    - toc.integrate
   palette:
     - scheme: default
       primary: indigo
@@ -40,7 +40,6 @@ plugins:
   - minify:
       minify_html: true
 
-
 # Customization
 extra:
   social:
@@ -52,7 +51,6 @@ extra:
       link: https://hub.docker.com/orgs/nciccbr/repositories
   version:
     provider: mike
-
 
 # Extensions
 markdown_extensions:
@@ -72,7 +70,7 @@ markdown_extensions:
   - pymdownx.critic
   - pymdownx.details
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight
   - pymdownx.inlinehilite
@@ -93,13 +91,7 @@ markdown_extensions:
 
 # Page Tree
 nav:
-  - Background : index.md
-  - Usage: 
-    - 1. Getting Started : user-guide/getting-started.md
-    - 2. Preparing Files: user-guide/preparing-files.md
-    - 3. Running the Pipeline: user-guide/run.md
-    - 4. Expected Output: user-guide/output.md
-    - 5. Running Test Data: user-guide/test-info.md
-  - FAQ:
-    - Troubleshooting: user-guide/troubleshooting.md
-    - Contributions: user-guide/contributions.md
+  - Background: index.md
+  - Flowchart: flowchart.md
+  - Usage: usage.md
+  - Resources: resources.md

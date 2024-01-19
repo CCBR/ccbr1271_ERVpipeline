@@ -1,6 +1,13 @@
 from os.path import join
 include: join("rules","init.smk")
 
+def get_hervquant_output(wildcards):
+    filelist = list()
+    if GENOME.startswith("hg"):
+        filelist.extend(expand(join(WORKDIR,"results","hervquant","{replicate}","{replicate}.dummy"),replicate=REPLICATES))
+        filelist.extend(expand(join(WORKDIR,"results","hervquant","{replicate}","{replicate}.Aligned.out.filtered.bam"),replicate=REPLICATES))
+    return filelist
+
 localrules: all
 rule all:
     input:
@@ -19,20 +26,26 @@ rule all:
         expand(join(WORKDIR,"results","HOMER","{replicate}","class","tagInfo.txt"),replicate=REPLICATES),
         join(WORKDIR,"results","HOMER","counts","countsTable.class.tsv"),
         join(WORKDIR,"results","HOMER","counts","countsTable.class.geve.tsv"),
+        join(WORKDIR,"results","HOMER","counts","countsTable.class.geve.annotated.tsv"),
 
         #homer locus
         expand(join(WORKDIR,"results","HOMER","{replicate}","locus","tagInfo.txt"),replicate=REPLICATES),
         join(WORKDIR,"results","HOMER","counts","countsTable.locus.tsv"),
         join(WORKDIR,"results","HOMER","counts","countsTable.locus.geve.tsv"),
+        join(WORKDIR,"results","HOMER","counts","countsTable.locus.geve.annotated.tsv"),
 
         #megahit
         expand(join(WORKDIR,"results","megahit","{replicate}","{replicate}.contigs.fa"), replicate=REPLICATES),
 
         #diamond
         expand(join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.tsv"),replicate=REPLICATES),
-        # expand(join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.taxid.tsv"),replicate=REPLICATES),
+        expand(join(WORKDIR,"results","diamond","{replicate}","{replicate}.nr.annotated.tsv"),replicate=REPLICATES),
+
+        # hervquant
+        get_hervquant_output,
 
 include: join("rules","qc.smk")
 include: join("rules","align.smk")
 include: join("rules","megahit.smk")
 include: join("rules","homer.smk")
+include: join("rules","hervquant.smk")
