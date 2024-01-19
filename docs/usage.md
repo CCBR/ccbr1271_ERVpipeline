@@ -1,5 +1,3 @@
-## Usage
-
 The code for this pipeline us located at `/data/EVset_RNAseq/Pipelines/ERVPipeline/<version_number>` on BIOWULF.
 
 ```bash
@@ -71,3 +69,13 @@ VersionInfo:
 
 ##########################################################################################
 ```
+
+### Inputs
+
+Samples are assumed to be single-end or paired-end fastqs which have already been adapter and UMI-trimmed. Intermediate fastqs from the [longRNA pipeline](https://github.com/CCBR/ccbr1271_longRNA) can be used as inputs. The sample manifest is expected to be tab-delimited with these columns headers:
+
+- replicateName
+- sampleName
+- stranded (Y or N)
+- path_to_R1_fastq
+- path_to_R2_fastq

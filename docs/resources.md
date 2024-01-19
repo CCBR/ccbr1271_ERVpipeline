@@ -1,5 +1,3 @@
-## Resources
-
 This pipeline requires a few resources to be created ahead of time to be supplied to the pipeline at runtime.
 
 ### Genomes

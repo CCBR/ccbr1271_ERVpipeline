@@ -128,58 +128,13 @@ VersionInfo:
 
 #### 4.2 Resources
 
-- different versions of the pipeline are retained at `/data/EVset_RNAseq/Pipelines/ERVPipeline`
-- mm10 (mouse) and hg38 (human) genomes were downloaded from UCSC directly. Only canonical chromosomes were retained, that is, chr1 through chr19 plus chrX, chrY and chrM for mouse; and chr1 through chr22 plus chrX, chrY and chrM for human.
-
-```bash
-⠠⠵ wget https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/mm10.fa.gz
-⠠⠵ wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz
-```
-
-- STAR indices were created using version 2.7.9a and located at `/data/EVset_RNAseq/Pipelines/ERVPipeline/resources`.
-- geve GTFs were provided by Stephanie. These seemed to be modified versions of files downloaded from [GEVE](http://geve.med.u-tokai.ac.jp/)
-- DIAMOND nr database was creating using the following commands:
-
-```bash
-## NR fasta
-# Download the entire NR fasta file
-⠠⠵ wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz
-
-## build diamond index
-# ref: [diamond wiki](https://github.com/bbuchfink/diamond/wiki/3.-Command-line-options)
-
-### taxonmap file
-⠠⠵ wget //ftp.ncbi.nlm.nih.gov/pub/taxonomy/accession2taxid/prot.accession2taxid.FULL.gz
-
-### taxonnodes file
-# `nodes.dmp` is part of this zip
-⠠⠵ wget ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip
-
-### taxonnames file
-# taxonnodes zip file contains the `names.dmp`
-
-### command
-
-⠠⠵ diamond makedb \
- --threads 8 \
- --in nr.gz \
- --db nr.diamond_index \
- --taxonmap prot.accession2taxid.FULL.gz \
- --taxonnodes nodes.dmp \
- --taxonnames names.dmp
-```
+Please see [resources](!./docs/resources.md) page for details.
 
 #### 4.3 Location
 
 This pipeline is located at `/data/EVset_RNAseq/Pipelines/ERVPipeline` on [BIOWULF](https://hpc.nih.gov).
 
-#### 4.4 Inputs
-
-Samples are assumed to be single-end or paired-end fastqs which have already been adapter and UMI-trimmed. Intermediate fastqs from the [longRNA pipeline](https://github.com/CCBR/ccbr1271_longRNA) can be used as inputs. The sample manifest is expected to be tab-delimited with these columns headers:
-
-- sampleName
-- path_to_R1_fastq
-- path_to_R2_fastq
+Refer complete [documentation](https://ccbr.github.io/ccbr1271_ERVpipeline/) for more details.
 
 <hr>
 <p align="center">

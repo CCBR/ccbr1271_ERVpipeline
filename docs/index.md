@@ -1,5 +1,3 @@
-## Background
-
 ERV identification, annotation and quantification pipeline built for ccbr1271. This pipeline detects and quantifies Endogenous Retroviruses using the scripts obtained from the Belkaid group.
 
 - This pipeline built using [Snakemake](https://snakemake.readthedocs.io/en/stable/).
