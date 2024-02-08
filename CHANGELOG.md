@@ -1,5 +1,12 @@
 ## Development Version
 
+## v1.0.1
+
+- feat: aggregate raw counts for hervquant (plus TPM) #24
+- fix: remove unnecessary normlization of locus and class aggregates (#23)
+- feat: version control doc mike plugin added
+- feat: GHA updates
+
 ## v1.0.0
 
 - feat: add annotation to HOMER output #12

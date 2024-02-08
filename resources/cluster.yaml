@@ -36,6 +36,12 @@ hervquant:
   gres: lscratch:220
   threads: 56
   time: 02-00:00:00
+annotate_class:
+  time: 00-12:00:00
+  threads: 16
+annotate_locus:
+  time: 00-12:00:00
+  threads: 16
 annotate_diamond:
   threads: 1
   mem: 400g

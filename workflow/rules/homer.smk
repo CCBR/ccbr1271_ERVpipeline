@@ -72,7 +72,7 @@ done
 analyzeRepeats.pl \\
     repeats \\
     {params.genome} \\
-    -d $list_of_dirs \\
+    -d $list_of_dirs -noadj \\
     > {output.counts}
 """
 
@@ -99,7 +99,7 @@ done
 analyzeRepeats.pl \\
     repeats \\
     {params.genome} \\
-    -d $list_of_dirs \\
+    -d $list_of_dirs -noadj \\
     > {output.counts}
 """
 
