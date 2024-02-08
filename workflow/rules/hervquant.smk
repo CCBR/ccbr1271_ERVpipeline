@@ -12,14 +12,14 @@ rule hervquant:
     input:
         unpack(get_hervquant_input),
     output:
-        dummy                       = join(WORKDIR,"results","hervquant","{replicate}","{replicate}.dummy"),
+        quantsf                     = join(WORKDIR,"results","hervquant","{replicate}","quant.sf"),
         filtered_bam                = join(WORKDIR,"results","hervquant","{replicate}","{replicate}.Aligned.out.filtered.bam"),
     params:
         name                        = "{replicate}",
         outdir                      = join(WORKDIR,"results","hervquant","{replicate}"),
         peorse                      = get_peorse,
         randomstr                   = str(uuid.uuid4()),
-        hervquantindexdir           = join(INDEXDIR,"hervquant"),
+        hervquantindexdir           = join(SCRIPTSDIR,"hervquant_aggregate.R"),
         hervquant_final_reference   = join(INDEXDIR,"hervquant","hervquant_final_reference.fa"),
     threads: getthreads("hervquant")
     envmodules: TOOLS["star"],
@@ -60,4 +60,41 @@ salmon quant \
  -a {output.filtered_bam} \
  -o {params.outdir} \
  -p {threads}
+"""
+
+rule hervquant_aggregate:
+    input:
+        expand(join(WORKDIR,"results","hervquant","{replicate}","quant.sf"),replicate=REPLICATES),
+    output:
+        rawcounts_tsv               = join(WORKDIR,"results","hervquant","hervquant_rawcounts.tsv"),
+        rawcounts_xlsx              = join(WORKDIR,"results","hervquant","hervquant_rawcounts.xlsx"),
+        TPM_tsv                     = join(WORKDIR,"results","hervquant","hervquant_TPM.tsv"),
+        TPM_xlsx                    = join(WORKDIR,"results","hervquant","hervquant_TPM.xlsx"),
+    params:
+        outdir                      = join(WORKDIR,"results","hervquant"),
+        randomstr                   = str(uuid.uuid4()),
+        hervquant_aggregate_rscript = join(SCRIPTSDIR,"hervquant_aggregate.R"),
+        hervquant_lookup            = join(INDEXDIR,"hervquant","herv_lookup.psv"),
+    threads: getthreads("hervquant")
+    envmodules: TOOLS["R"],
+    shell:"""
+{SETSTR}
+{TMPDIR_STR}
+
+cd {params.outdir}
+
+Rscript \\
+    {params.hervquant_aggregate_rscript} \\
+    --hervquantfolder {params.outdir} \\
+    --lookuptable {params.hervquant_lookup} \\
+    --outfile {output.rawcounts_tsv} \\
+    --exceloutfile {output.rawcounts_xlsx}
+
+Rscript \\
+    {params.hervquant_aggregate_rscript} \\
+    --hervquantfolder {params.outdir} \\
+    --lookuptable {params.hervquant_lookup} \\
+    --outfile {output.TPM_tsv} \\
+    --exceloutfile {output.TPM_xlsx} \\
+    --counttype TPM
 """
