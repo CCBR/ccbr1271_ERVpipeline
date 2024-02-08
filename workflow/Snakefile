@@ -4,8 +4,12 @@ include: join("rules","init.smk")
 def get_hervquant_output(wildcards):
     filelist = list()
     if GENOME.startswith("hg"):
-        filelist.extend(expand(join(WORKDIR,"results","hervquant","{replicate}","{replicate}.dummy"),replicate=REPLICATES))
+        filelist.extend(expand(join(WORKDIR,"results","hervquant","{replicate}","quant.sf"),replicate=REPLICATES))
         filelist.extend(expand(join(WORKDIR,"results","hervquant","{replicate}","{replicate}.Aligned.out.filtered.bam"),replicate=REPLICATES))
+        filelist.append(join(WORKDIR,"results","hervquant","hervquant_rawcounts.tsv"))
+        filelist.append(join(WORKDIR,"results","hervquant","hervquant_rawcounts.xlsx"))
+        filelist.append(join(WORKDIR,"results","hervquant","hervquant_TPM.tsv"))
+        filelist.append(join(WORKDIR,"results","hervquant","hervquant_TPM.xlsx"))
     return filelist
 
 localrules: all
