@@ -123,7 +123,7 @@ SCRIPTDIRNAME=$(readlink -f $(dirname $0))
 SCRIPTBASENAME=$(readlink -f $(basename $0))
 
 GENOME="hg38"
-SUPPORTED_GENOME="hg38 mm10"
+SUPPORTED_GENOMES="hg38 mm10"
 
 # essential files
 # these are relative to the workflows' base folder
@@ -620,12 +620,12 @@ function main(){
           fi
         done
         if [[ "$found" == "0" ]];then
-          err "$GENOME is not supported by ASPEN; Supported genomes are: $SUPPORTED_GENOMES"
+          err "$GENOME is not supported by this pipeline; Supported genomes are: $SUPPORTED_GENOMES"
           exit 1
         fi
       ;;
       --version)
-        printbanner ${ASPENVERSION} && exit 0;
+	cat ${SCRIPTDIRNAME}/VERSION && exit 0;
       ;;
       -h|--help)
         usage && exit 0;;
