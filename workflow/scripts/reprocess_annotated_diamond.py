@@ -93,7 +93,10 @@ def main():
                 print("Unknown found in line:")
                 print("\t".join(l))
                 new_tid = get_taxid(l[1])
-                new_lineage = taxid2lineage[new_tid]
+                try:
+                    new_lineage = taxid2lineage[new_tid]
+                except:
+                    new_lineage = "Unknown"
                 l[12] = new_tid
                 l[14] = new_lineage
                 print("new_taxid=", new_tid)

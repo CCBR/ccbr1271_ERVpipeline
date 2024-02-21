@@ -1,5 +1,14 @@
 ## Development Version
 
+## v1.0.3
+
+- fix: bug in reannotate diamond results .. Fixed!
+
+## v1.0.2
+
+- fix: fix #28 typo in `erv` wrapper
+- fix: fix #29 `--version` not printing
+
 ## v1.0.1
 
 - feat: aggregate raw counts for hervquant (plus TPM) #24
