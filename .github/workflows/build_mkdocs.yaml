@@ -6,6 +6,10 @@ on:
       - main
     paths:
       - "docs/**"
+
+permissions:
+  pages: write
+  contents: write
 jobs:
   deploy:
     runs-on: ubuntu-latest
